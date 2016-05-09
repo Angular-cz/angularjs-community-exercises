@@ -1,0 +1,35 @@
+{
+  "name": "angular-cz-exrcise",
+  "private": true,
+  "version": "3.0.0",
+  "author": "angular@angular.cz",
+  "devDependencies": {
+    "bower": "^1.7.7",
+    "connect": "^3.4.1",
+    "courseware": "^0.4.12",
+    "gulp": "^3.9.1",
+    "karma": "^0.13.21",
+    "karma-chrome-launcher": "~0.2",
+    "karma-cli": "0.1.2",
+    "karma-firefox-launcher": "~0.1.7",
+    "karma-jasmine": "^0.3.8",
+    "karma-json-result-reporter": "^0.4.2",
+    "karma-nested-reporter": "~0.1.4",
+    "karma-phantomjs-launcher": "~1.0",
+    "karma-story-reporter": "^0.3.1",
+    "phantomjs-prebuilt": "^2.1.4",
+    "serve-static": "^1.10.2"
+  },
+  "scripts": {
+    "postinstall": "bower install && courseware build",
+
+    "start": "gulp",
+    "devel": "courseware devel",
+
+    "test-05-di": "karma start 05-di/karma.conf.js",
+    "test-06-di-unit-testing": "karma start 06-di-unit-testing/karma.conf.js",
+    "test-09-directive-scope": "karma start 09-directive-scope/karma.conf.js",
+
+    "update": "git reset --hard && rm -rf node_modules bower_components && git pull && rm -rf node_modules && npm install"
+  }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="diApp">
+  <head>
+    <meta charset="utf-8">
+    <title>05-di | Angular.cz</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="app.js"></script>
+  </head>
+  <body>
+    <div ng-controller="CalculatorCtrl as calculatorCtrl" class="container col-md-offset-3 col-md-6">
+      <h1>Objednávka poznámkového bloku</h1>
+
+      <div class="well">
+        <h2>Velikost</h2>
+        <p>
+          <label class="radio-inline">
+            <input type="radio" ng-model="calculatorCtrl.product.pageSize" value="A4" />
+            A4
+          </label>
+          <label class="radio-inline">
+            <input type="radio" ng-model="calculatorCtrl.product.pageSize" value="A5" />
+            A5
+          </label>
+          <label class="radio-inline">
+            <input type="radio" ng-model="calculatorCtrl.product.pageSize" value="A6" />
+            A6
+          </label>
+        </p>
+
+        <h2>Počet stran</h2>
+        <p>
+          <input type="number" ng-model="calculatorCtrl.product.numberOfPages" class="form-control" />
+        </p>
+
+        <h2>Cena</h2>
+        <p class="lead">
+          {{calculatorCtrl.getPrice()}} Kč
+        </p>
+
+      </div>
+    </div>
+  </body>
+</html>

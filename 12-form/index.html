@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html ng-app="FormApp" ng-cloak>
+<head>
+  <title>12-form | Angular.cz</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="styles.css" rel="stylesheet" type="text/css"/>
+
+  <script src="/bower_components/angular/angular.js"></script>
+  <script src="/bower_components/angular-messages/angular-messages.js"></script>
+  <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="/bower_components/ngstorage/ngStorage.js"></script>
+
+  <script src="app.js"></script>
+</head>
+<body class="container" ng-controller="ContactlistController as vm">
+<div class="row">
+  <div class="col-md-6">
+
+
+    <!-- TODO 2.1 přiřaďte formulář do scope-->
+    <!-- TODO 6 reagujte na odeslání formuláře -->
+    <form novalidate>
+      <fieldset>
+        <legend>Contactlist</legend>
+        <div class="form-group">
+          <label for="listName">List name*: </label>
+          <input class="form-control" type="text" id="listName"
+                 name="listName"
+                 ng-model="vm.contactlist.name"
+                 required
+                 minlength="5"
+          />
+
+          <!-- TODO 2.2 zobrazení validačních textů -->
+          <!-- TODO 2.3 user-friendly chování -->
+          <div>
+
+            <div class="text-danger">
+              You did not enter contactlist name
+            </div>
+            <div class="text-danger">
+              Name must have at least 5 characters
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TODO 3.1 vytvořte zanořený formulář -->
+        <fieldset class="well form-inline"
+                  ng-repeat="(index, contact) in vm.contactlist.contacts">
+
+          <button type="button" class="btn btn-danger pull-right" ng-click="vm.removeContact(index)">-</button>
+
+          <div class="form-group">
+            <label for="name-{{$index}}">Name</label>
+            <input class="form-control" type="text" id="name-{{$index}}"
+                   name="name"
+                   ng-model="contact.name"
+                   required/>
+
+            <!-- TODO 3.2 validace jména kontaktu -->
+
+
+            <!-- TODO 4.2 použijte validátor českého čísla -->
+            <label for="phone-{{$index}}">Phone</label>
+            <input class="form-control" type="text" id="phone-{{$index}}"
+                   name="phone"
+                   ng-model="contact.phone"
+                   required/>
+
+            <validation-messages input-field="contactForm.phone">
+              <!-- TODO 4.3 definujte chybovou zprávu pro czechPhoneNumber -->
+
+            </validation-messages>
+          </div>
+        </fieldset>
+
+        <button type="button" class="btn btn-success" ng-click="vm.addContact()">+</button>
+
+        <hr/>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-warning"
+                ng-disabled="contactlistForm.$pristine"
+                ng-click="vm.reset(contactlistForm)">Reset
+        </button>
+    </form>
+
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+        <pre>
+contactlist:
+{{vm.contactlist|json}}
+
+storage:
+{{vm.dataStorage.get() | json}}
+        </pre>
+  </div>
+</div>
+</body>
+</html>

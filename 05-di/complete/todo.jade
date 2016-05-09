@@ -1,0 +1,111 @@
+p Controller by měl obsahovat pouze minimum logiky, ta by měla být oddělena do služeb. V tomto cvičení se pokusíme z extrahovat logiku výpočtu z controlleru do služby calculator.
+
+h3 1. vyzkoušejte funkčnost kalkulačky
+ul
+  li podívejte se na implementaci výpočtu v controlleru v #[em app.js]
+  li vyzkoušejte funkčnost kalkulačky, že se výpočet mění při volbě formátu, stránky se počítají po pěti
+  li poté ověřte, že projdou testy, které funkčnost testují
+  li.task spusťte v terminálu příkaz:
+
+snippet.
+  npm run test-05-di
+
+ul
+  li Výsledky se budou zobrazovat v konzoli, ale také zde v prohlížeči.
+.warning Aby jste si byli jisti že je výsledek aktuální, je v pravém rohu zobrazen čas spuštění testů.
+
+tests-results
+
+h3 2. Přesuňte defaultní objekt do value
+h4 2.1 - vytvořte value defaultProduct
+ul.task
+  li vytvořte value #[strong defaultProduct] pomocí #[strong .value]
+  li přesuňte do ní nastavení productu z controlleru.
+
+solution
+  :highlight-js
+    .value('defaultProduct', {
+      pageSize: 'A5',
+      numberOfPages: 50
+    })
+
+h4 2.2 - použití value v controlleru
+ul.task
+  li injektněte vytvořenou value defaultProduct do controlleru #[strong CalculatorCtrl]
+  li přiřaďte ji do #[strong this.product]
+
+
+hint Injektáž provedete uvedením mezi parametry konstrukční funkce controlleru
+
+
+solution
+  :highlight-js
+    .controller('CalculatorCtrl', function (defaultProduct) {
+      this.product = defaultProduct;
+
+h3 3. Přesuňte logiku z controlleru do service
+h4 3.1 - vytvořte service calculator
+ul.task
+  li vytvořte service #[strong calculator] a přesuňte sem metodu #[strong getPrice]
+  li přidejte jí parametr #[strong product], který nahradí původní získání produktu z #[strong this.product]
+  li v controlleru ponechte prázdnou metodu #[strong getPrice] obsah doplníme v dalším kroku
+
+solution
+  :highlight-js
+    .service('calculator', Calculator);
+
+    ...
+
+    function Calculator() {
+      this.getPrice: function (product) {
+        ...
+        return price;
+      };
+    }
+
+h4 3.2 - použijte service calculator
+ul.task
+  li injektněte vytvořenou service do controlleru a v původní metodě #[strong getPrice] zavolejte metodu pro výpočet v #[strong calculator.getPrice] s parametrem #[strong this.product].
+
+solution
+  :highlight-js
+    .controller('CalculatorCtrl', CalculatorController)
+
+    ...
+
+    function CalculatorController(defaultProduct, calculator) {
+      ...
+
+      this.getPrice = function () {
+       return calculator.getPrice(this.product);
+      };
+
+      ...
+    }
+
+ul.task
+  li ověřte, že projdou testy
+
+tests-results
+
+h3 4. Přidejte závislost $log do service calculator
+p Služba calculator loguje při každém výpočtu zadané hodnoty, pomocí console. Zobecníme zde její použití a použijeme logovací službu poskytovanou angularem #[strong $log], která má obdobné api.
+
+h4 4.1 - injektněte $log
+ul.task
+  li injektněte službu #[strong $log] do service calculator a zaměňte volání #[strong console.log] za #[strong $log.log]
+
+solution
+  :highlight-js
+    .service('calculator', Calculator)
+
+    ...
+
+    function Calculator($log) {
+      this.getPrice: function (product) {
+        ...
+        $log.log('Price : ' ...
+      };
+    }
+
+tests-results(title-only)

@@ -1,0 +1,15 @@
+{
+  "introFile": "courseware-intro.jade",
+  "header": "AngularJS exercises - www.angular.cz",
+  "todoFilePath": "complete/todo.jade",
+  "todos": [
+    "01-templates",
+    "02-controller",
+    "05-di",
+    "06-di-unit-testing",
+    "09-directive-scope",
+    "12-form"
+  ],
+  "testsSocket": true,
+  "testsResultsPath": "test-results"
+}

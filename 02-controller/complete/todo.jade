@@ -1,0 +1,114 @@
+h3 1. Použití controlleru v šabloně
+h4 1 - přidejte vazbu na controller
+ul.task
+  li podívejte se na definici controlleru v #[em app.js]
+  li v #[em index.html] si všimněte v html tagu definice #[strong ng-app]
+  li přidejte na element body vazbu na controller pomocí directivy #[strong ng-controller]
+
+solution
+  :highlight-html
+    <body ng-controller="UserController" class="container">
+
+h3 2. Úvodní stav objektu user
+h4 2 - inicializujte objekt user ve $scope
+ul.task
+  li v controlleru v #[em app.js] přiřaďte do #[strong $scope.user] objekt níže
+
+snippet.
+  {
+    name: 'Petr',
+    surname: 'Novák',
+    yearOfBirth: 1982
+  };
+
+solution
+  :highlight-js
+    $scope.user = {
+      name: 'Petr',
+      surname: 'Novák',
+      yearOfBirth: 1982
+    };
+
+ul
+  li data se objeví vypsána v šabloně v pravém panelu
+
+h3 3. Propojení modelu s formulářem
+h4 3 - přidejte vazbu na objekt user
+
+ul.task
+  li připojte jednotlivé attributy objektu user na formulářové prvky input pomocí directivy #[strong ng-model]
+
+solution
+  :highlight-html
+    <input id="userName"    ng-model="user.name"        class="form-control">
+    <input id="userSurname" ng-model="user.surname"     class="form-control">
+    <input id="yearOfBirth" ng-model="user.yearOfBirth" class="form-control" type="number">
+
+ul
+  li pravý panel s výpisem již obsahuje výrazy
+  li.task vyzkoušejte tedy, že funguje dvoucestný databinding
+
+h3 4. Výpočet věku
+
+h4 4 - přiřaďte funkci getAge do $scope
+
+solution
+  :highlight-js
+    $scope.getAge = function () {
+      var now = new Date();
+      return now.getFullYear() - $scope.user.yearOfBirth;
+    };
+
+ul
+  li metoda je v šabloně už použita
+  li.task vyzkoušejte tedy, jak se nyní aplikace chová
+
+h3 5. Změňte konstrukci controlleru na controller as
+
+h4 5.1 - přiřaďte data a funkce místo na #[strong $scope] do #[strong this]
+ul
+  li.task nezapomeňte upravit také použití případného výrazu se #[strong $scope]
+
+solution
+  :highlight-js
+    this.user = {
+      ...
+    };
+
+    this.getAge = function() {
+      var now = new Date();
+      return now.getFullYear() - this.user.yearOfBirth;
+    };
+
+h4 5.2 - upravte použití controlleru jako controller as
+
+ul.task
+  li jako název controlleru v šabloně použijte #[strong vm]
+
+solution
+  :highlight-html
+    <body ng-controller="UserController as vm" class="container">
+
+h4 5.3.1 - upravte použití v ng-model
+ul.task
+  li V šabloně už nejsou data ve scope, ale v objektu #[strong vm]
+  li upravte použití v ng-model
+
+solution
+  :highlight-html
+    <input id="userName" ng-model="vm.user.name" class="form-control"/>
+    <input id="userSurname" ng-model="vm.user.surname" class="form-control"/>
+    <input id="yearOfBirth" ng-model="vm.user.yearOfBirth" class="form-control" type="number"/>
+
+h4 5.3.2 - upravte použití ve výrazech
+ul
+  li.task upravte použití ve výrazech pro zobrazení
+
+solution
+  :highlight-html
+    <div>Jméno: {{vm.user.name}}</div>
+    <div>Příjmení: {{vm.user.surname}}</div>
+    <div>Věk: {{vm.getAge()}}</div>
+
+ul
+  li.task ověřte že se data stále propisují z formuláře do výpisu

@@ -1,0 +1,184 @@
+h3 1 - Ověřte, že stále fungují testy
+
+ul
+  li.task Spusťte v nové konzoli příkaz:
+
+snippet.
+  npm run test-06-di-unit-testing
+
+ul
+  li karma runner nyní sleduje změny a spouští testy automaticky
+  li zároveň by se Vám měli zobrazovat přímo zde
+
+h3 2 - Integrační test - CalculatorCtrl.integration.spec.js
+
+ul
+  li.task Prohlédněte si implementaci testu #[em CalculatorCtrl.integration.spec.js]
+    ul
+      li Všimněte si bloků #[em beforeEach] s inicializací modulu a způsob injektování služby #[strong $controller]
+
+  li Jedná se o integrační test, testuje chování controlleru spolu se service která se volá
+  li Zdrojový kód v #[em app.js] odpovídá předchozímu příkladu
+
+tests(todo="2.0")
+
+h4 2.1 - Implementujte integrační test
+
+ul
+  li test case #[strong should return 120 when format is A5 and number of pages is 50] je prázdný
+  li.test implementujte test podle textového popisu, můžete vyjít z existujícího testu
+
+solution
+  :highlight-js
+    this.controller.product = {
+      pageSize: 'A5',
+      numberOfPages: 50
+    };
+
+    expect(this.controller.getPrice()).toEqual(120);
+
+tests(todo="2.1")
+
+h3 3 - Jednotkový test - Calculator.spec.js
+p Protože service #[strong calculator] je služba s dobře definovaným rozhraním, je možné ji otestovat samostatně.
+  ul
+    li Služba calculator má metodu #[strong getPrice(product)], kterou stačí zavolat s produktem a získat výsledek
+    li Testovat službu budeme v samotatném souboru #[em Calculator.spec.js]
+
+h4 3.1 - Inicializujte module diApp a injektněte službu calculator
+
+ul.task
+  li inicializujte v #[em Calculator.spec.js] před začátkem testů modul #[strong diApp]
+
+hint Budete potřebovat využít funkci jasmine #[strong beforeEach] a #[strong module(moduleName)]
+
+solution
+  :highlight-js
+    beforeEach(module('diApp'));
+
+ul.task
+  li před spuštěním dále testů injektněte službu #[strong calculator] a přiřaďte ji do #[strong this.calculator]
+
+hint Přiřazení můžete provést v další sekci #[strong beforeEach].
+  br
+  | K získání fuknce využijte funkci #[strong inject], která dostává funkci nad kterou provádí injektáž.
+
+solution
+  :highlight-js
+    beforeEach(inject(function(calculator){
+      this.calculator = calculator;
+    }));
+
+tests(todo="3.1")
+
+h4 3.2 - Implementujte jednotkový test
+ul
+  li budeme implementovat prázdný test #[strong should return 90 when format is A5 and number of pages is 0]
+  li.task zavolejte metodu #[strong getPrice] injektnutého calculatoru s následujícím produktem
+    snippet.
+      {
+        pageSize: 'A5',
+        numberOfPages: 0
+      }
+  li.task očekávejte, že vrátí hodnotu #[strong 90]
+
+hint Službu calculatoru máte uloženou v #[strong this.calculator]
+  br
+  | Pro ověření hodnot použijte funkce #[strong expect] a #[strong toBe]
+
+solution
+  :highlight-js
+    var product = {
+      pageSize: 'A5',
+      numberOfPages: 0
+    };
+
+    expect(this.calculator.getPrice(product)).toBe(90);
+
+tests(todo="3.2")
+
+h3 4 - Mockování služeb - CalculatorCtrl.spec.js
+p Nyní budeme opět testovat volání controlleru, tentokrát ale budeme testovat jeho chování vzhledem ke službě calculator.
+  ul
+    li Naše práce se bude odehrávat v CalculatorCtrl.spec.js
+
+h4 4.1 - Test volání služby
+p Službu #[strong calculator] nahradíme falešným objektem a budeme sledovat, zda byla tato při volání metody #[strong getPrice] controlleru volána se správným parametrem.
+
+h5 4.1.1 - nahraďte službu calculator falešnou službou calculatorMock
+ul
+  li v sekci beforeEach máme připraven falešný objekt #[strong calculatorMock]
+  li.task nahraďte tímto objektem skutečnou službu #[strong calculator]
+
+hint Použijte volání funkce #[strong module] s objektem jako parametr ve tvaru #[strong {serviceName: serviceMock}]
+
+solution
+  :highlight-js
+    module({
+      calculator : calculatorMock
+    });
+
+tests(todo="4.1.1")
+
+h5 4.1.2 - udělejte z metody getPrice spy
+ul
+  li.task z metody #[strong getPrice] objektu #[strong calculatorMock] udělejte spy, který bude možné sledovat
+
+hint Použijte metodu #[strong spyOn] s parametem objektu a názvu jeho metody.
+
+solution
+  :highlight-js
+    spyOn(calculatorMock, 'getPrice');
+
+tests(todo="4.1.2")
+
+h5 4.1.3 - otestujte, že byla getPrice volaná
+ul
+  li v testu #[strong should call getPrice on calculator] je již volána metoda #[strong getPrice] controlleru
+  li.task zkontrolujte, že byla v tu dobu volána metoda #[strong getPrice] objektu #[strong calculatorMock]
+  li.task také zkontrolujte, zda byla volána s produktem používaným v controlleru - #[strong controller.product]
+
+hint Jako parametr metody #[strong expect] použijte vytvořený spy #[strong calculatorMock.getPrice].
+  br
+  | Jako matchery použijte #[strong .toHaveBeenCalled] a #[strong .toHaveBeenCalledWith([arguments])]
+
+solution
+  :highlight-js
+    expect(calculatorMock.getPrice).toHaveBeenCalled();
+    expect(calculatorMock.getPrice).toHaveBeenCalledWith(controller.product);
+
+tests(todo="4.1.3")
+
+h4 4.2 - Test návratové hodnoty
+p Otestovali jsme, že je služba volaná k úplnosti chybí otestovat návratovou hodnotu
+
+h5 4.2.1 - getPrice by měla vracet FAKE_VALUE
+ul
+  li.task nastavte spy #[strong getPrice], aby vracel připravenou konstantu #[strong FAKE_VALUE]
+
+hint Po vytvoření spy na něm můžete zavolate #[strong .and.returnValue(value)]
+
+solution
+  :highlight-js
+    spyOn(calculatorMock, 'getPrice').and.returnValue(FAKE_VALUE);
+
+tests(todo="4.2.1")
+
+h5 4.2.2 - otestujte návratovou hodnotu getPrice
+ul
+  li v testu #[strong should return value from calculator factory] budeme ověřovat, že metoda controlleru vrací to co vrátila volaná service
+  li.task otestujte, že volání #[strong controller.getPrice()] vrátí konstantu #[strong FAKE_VALUE]
+
+solution
+  :highlight-js
+    expect(controller.getPrice()).toBe(FAKE_VALUE);
+
+tests(todo="4.2.2")
+
+h3 5 - Ověřte testy
+
+p Pokud nyní všechy testy prochází, gratulujeme, máte hotovo.
+ul
+  li Pokud chcete, můžete si v app.js zkusit v metodě controlleru postupně zakomentovávat volání, návratovou hodnotu nebo parametr a vyzkoušet tak, že testy opravdu fungují.
+
+tests-results

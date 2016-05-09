@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="bacon">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>09-directive-scope | Angular.cz</title>
+
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+  <script src="/bower_components/angular/angular.js"></script>
+  <script src="service.js"></script>
+  <script src="app.js"></script>
+</head>
+<body ng-controller="BaconController as bacon">
+
+<div class="container">
+
+  <!-- TODO 1 -->
+  <h3>bacon-ipsum</h3>
+  <bacon-ipsum></bacon-ipsum>
+  <hr/>
+
+  <!--   TODO 2
+    <h3>bacon-ipsum s parametrem paragraphs="2"</h3>
+    <bacon-ipsum paragraphs="2"></bacon-ipsum>
+    <hr />
+  -->
+
+  <!-- TODO 3
+    <input ng-model="bacon.title3"/>
+    <bacon-ipsum title="{{bacon.title3}}"></bacon-ipsum>
+    <hr />
+  -->
+</div>
+</body>
+</html>

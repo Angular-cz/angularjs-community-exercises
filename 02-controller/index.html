@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="moduleExample">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>02-controller | Angular.cz</title>
+
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+  <script src="/bower_components/angular/angular.js"></script>
+  <script src="app.js"></script>
+</head>
+<!--TODO 5.2 - upravte použití controlleru jako controller as-->
+<!--TODO 1 - přidejte vazbu na controller-->
+<body>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-offset-1 col-md-4 well">
+
+      <!--TODO 5.3.1 - upravte použití v ng-model-->
+      <!--TODO 3 - přidejte vazbu na objekt user-->
+      <label for="userName">Jméno</label>
+      <input id="userName" class="form-control">
+      <label for="userSurname">Příjmení</label>
+      <input id="userSurname" class="form-control">
+      <label for="yearOfBirth">Rok narození</label>
+      <input id="yearOfBirth" class="form-control" type="number">
+    </div>
+
+    <!--TODO 5.3.2 - upravte použití ve výrazech-->
+    <div class="col-md-offset-1 col-md-5 well">
+      Jméno: {{user.name}}<br/>
+      Příjmení: {{user.surname}}<br/>
+      Věk: {{getAge()}}<br/>
+    </div>
+  </div>
+</div>
+</body>
+</html>

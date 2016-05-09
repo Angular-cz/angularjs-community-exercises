@@ -1,0 +1,10 @@
+/nbproject/
+/node_modules/
+/bower_components/
+/test-results/
+
+**/*iml
+**/.idea
+**/npm-debug.log
+aaapi/target
+/index.html

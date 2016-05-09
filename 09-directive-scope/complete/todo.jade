@@ -1,0 +1,130 @@
+p než začnete, prohlédněte si použití directivy v #[em index.html] (ř. 14)
+
+h3 1 - Doplňte definiční objekt directivy baconIpsum
+ul
+  li cílem tohoto cvičení je postupné budování definičního objektu direktivy v #[em app.js]
+
+ul.task
+  li definujte šablonu directivy - #[strong baconIpsum.html]
+
+hint šablonu určíte pomocí attributu #[strong templateUrl]
+
+solution
+  :highlight-js
+    templateUrl: 'baconIpsum.html'
+
+ul.task
+  li definujte funkci #[strong link] a v ní přidejte na #[strong scope] vlastnost #[strong data],
+  li jako hodnotu jí předejte připravená #[strong fakeData]
+
+hint Funkce link má signaturu function(scope, element, attrs)
+solution
+  :highlight-js
+    link:function(scope, element, attributes) {
+      scope.data = fakeData;
+    }
+
+ul
+  li prohlédněte si šablonu #[em baconIpsum.html] a ověřte, že se directiva správně vykresluje
+  li.task pro získání dat #[strong scope.data] použijte službu #[strong generator], formát dat je stejný jako v proměnné #[strong fakeData]
+  ul
+    li metoda má signaturu #[strong generator.getParagraphs(count)]
+      |  #[em defaultní hodnota count je 1]
+
+solution
+  :highlight-js
+    link:function(scope, element, attributes) {
+      scope.data = generator.getParagraphs();
+    }
+
+h3 2 - directiva s parametrem
+ul.task
+  li odkomentujte #[strong TODO 2] v #[strong index.html] a všimněte si parametru #[strong paragraphs=2]
+  li chceme, aby počet odstavců bylo možné nastavit tímto parametrem, proto
+  li předejte hodnotu attributu jako první parametr metody #[strong generator.getParagraphs]
+
+hint Funkce link má signaturu function(scope, element, attrs)
+  br
+  | K atributům můžete přistoupit přes vlastnosti objektu #[strong attrs]
+
+solution
+  :highlight-js
+    link:function(scope, element, attributes) {
+      scope.data = generator.getParagraphs(attributes.paragraphs);
+    }
+
+ul
+  li podívejte se jak se directiva chová a zamyslete se proč dochází k přepisování dat
+
+hint Direktivy sdílejí scope a dochází tak k přepsání dat prvního požadavku tím druhým
+
+ul.task
+  li Použijte tedy v definičním objektu direktivy zděděný scope
+
+hint Jako hodnotu attributu #[strong scope] použijte #[strong true]
+solution
+  :highlight-js
+    scope:true
+
+h3 3 - dynamická změna titulku
+ul
+  li.task odkomentujte TODO 3 v index.html a všimněte si parametru&nbsp;
+    strong
+      :escape_ng
+        title="{{bacon.title3}}"
+
+  li chceme, aby directiva reflektovala parametr #[strong title] jako titulek
+
+ul.task
+  li upravte directivu tak, aby používala izolovaný scope a přijímala parametr #[strong title] jako expression
+
+hint Expression vyjádříte pomocí symolu #[strong @]
+
+solution
+  :highlight-js
+    scope:{
+      title: '@'
+    }
+
+ul
+  li title už je v šabloně připraven, nyní zkontrolujte, že binding funguje (titulek se mění při změně inputu)
+  li zamyslete se, kde všude můžete použít one time binding, pro snižení počtu watcherů
+
+h2 EXTRA
+ul
+  li pokud jste došli až sem, můžete si vyzkoušet ještě dvoucestný databinding
+ul.task
+  li v definici izolovaného scope přidejte vlastnost #[strong title2way], mapovanou jako dvoucestný databinding
+  li do šablony directivy vložte input s #[strong ng-model="title2way"]
+  li upravte použití directivy tak, aby se do title2way předávala vlastnost bacon.title3
+ul
+  li je jasné
+  ul
+    li jak se liši použití = a @ ?
+    li jaké vstupy může který parametr přijímat?
+    li jak zapsat parametry při použití directivy?
+
+h2 EXTRA EXTRA
+ul
+  li pokud ještě nemáte dost, vyzkoušejte dynamickou změnu počtu paragrafů
+ul
+  li do šablony index.html vložte input type="number"  ngModel="bacon.paragraphs3"
+  li předejte model direktivě jako expression
+    strong
+      :escape_ng
+        ( {{...}} )
+
+ul.task
+  li uvnitř direktivy sledujte změny atributu paragraphs pomocí #[strong $observe]
+  li při změně aktualizujte data.
+
+ul
+  li.task  vyzkoušejte zavolání deregistračního callbacku pokud zadaný počet odstavců je roven nějakému číslu
+  li změny attributu se ihned přestanou zpracovávat.
+
+ul
+  li je jasné:
+  ul
+    li proč se bez sledování pomocí $observe změna atributu neprojeví?
+    li proč je nutné použít expression?
+    li jak deregistrovat sledované zdálosti?

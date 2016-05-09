@@ -1,0 +1,61 @@
+p Vyzkoušejte si různé formy expression.
+
+h3 1 - Doplňte direktivu inicializující angular
+ul
+  li.task Přidejte direktivu inicializující angular do tagu body nebo html
+
+hint Jde o direktivu ng-app
+
+solution
+  :highlight-html
+    <body ng-app>
+
+h3 2. Vyzkoušejte zápis výrazů
+ul.task
+  li napiště matematický výraz
+
+solution
+  :highlight-html
+    <li>1 + 3 = {{1 + 3}}</li>
+    <li>1 * 5 = {{1 * 5}}</li>
+
+ul.task
+  li napiště výraz s ternárním operátorem
+
+hint Myslí se tím operátor (výraz) ? true : false
+
+solution
+  :highlight-html
+    <li>ternary-true: {{3 == '3' ? 'ano' : 'ne'}}</li>
+    <li>ternary-false: {{3 === '3' ? 'ano' : 'ne'}}</li>
+
+ul.task
+  li výraz s globální proměnnou - #[strong globalVariable]
+  li vyzkoušejte i přístup přes #[strong window]
+  li
+    strong všimněte si, že není možné k proměnné přistoupit, ale nedojde k žádné chybě
+
+solution
+  :highlight-html
+    <li>globalVariable: {{globalVariable}}</li>
+    <li>window.globalVariable: {{window.globalVariable}}</li>
+
+h3 3. Dvoucestný databinding
+
+p Vyzkoušejte si použití dvoucestného databindingu a forgiving.
+
+ul.task
+  li V #[em index.html] přidejte attribut #[strong ng-model] k elementu #[strong input]
+  li jako hodnotu attributu použijte #[strong company]
+
+solution
+  :highlight-html
+    Firma <input type="text" ng-model="company" class="form-control"/><br />
+
+ul.task
+  li Vypište v šabloně pomocí expression hodnotu company
+
+solution
+  :highlight-html
+    <h4>Ahoj {{company}}!</h4>
+

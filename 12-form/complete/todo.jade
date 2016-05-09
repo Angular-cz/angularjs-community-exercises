@@ -1,0 +1,196 @@
+h3 1. vyzkoušejte že formulář funguje
+ul
+  li podívejte se v #[em index.html]
+  li jak je navázaný na vlastnost #[strong contactlist] controlleru ContactlistController
+  li jak se mění třídy formuláře a prvků
+  li jak se do modelu propagují validní/nevalidní hodnoty
+
+h3 2. validace
+p.
+  V tomto kroku oživíme validaci políčka List name.
+
+h4 2.1 přiřaďte formulář do scope
+p.
+  Stavové informace o formuláři bude angular ukládat do objektu pojmenovaném podle názvu formuláře.
+  Formulář tedy nejprve pojemnujeme, abychom měli přístup ke stavoým informacím.
+ul
+  li.task pojmenujte formulář #[strong contactlistForm]
+
+solution
+  :highlight-html
+    <form novalidate name="contactlistForm">
+
+h4 TODO 2.2 zobrazení validačních textů
+p.
+  Všimněte si, že chybové zprávy pro název kontakt listu jsou zobrazeny vždy.
+  Zajistíme teď jejich zobrazení jen když je konkrétní validační pravidlo porušeno.
+  Položka je povinná a má minimální délku 5 znaků.
+
+ul.task
+  li použijte ng-messages / ng-message pro správní zobrazení textů
+
+solution
+  :highlight-html
+    <div ng-messages="contactlistForm.listName.$error">
+      <div class="text-danger" ng-message="required">
+        You did not enter contactlist name
+      </div>
+      <div class="text-danger" ng-message="minlength">
+        Name must have at least 5 characters
+      </div>
+    </div>
+
+h4 TODO 2.3 user-friendly chování
+p.
+  Validační texty se nyní zobrazují správně, ale jsou vidět okamžite po obnovení stránky,
+  Lepší by bylo zobrazit je až při odeslání formuláře, nebo ve chvíli kdy uživatel s políčkem pracoval.
+
+hint.
+  využijte vlasnost $submited na formuláři a $touched na prvku
+
+ul
+  li.task zobrazujte validační texty až když je to relevantní
+
+solution
+  :highlight-html
+    <div ng-messages="contactlistForm.listName.$error"
+         ng-if="(contactlistForm.listName.$touched || contactlistForm.$submitted)">
+
+      <div class="text-danger" ng-message="required">
+        You did not enter contactlist name
+      </div>
+      <div class="text-danger" ng-message="minlength">
+        Name must have at least 5 characters
+      </div>
+    </div>
+
+h3 3 Zanořený formulář
+
+p.
+  Část formuláře se jmény a čísly se opakuje pro každý kontakt.
+  V názvech a cestách pro validaci bychom tedy museli používat dynamicky sestavenou cestu od formuláře #[strong contactlistForm], což by bylo komplikované.
+  Namísto toho využujeme zanožený formulář
+
+h4 3.1 vytvořte zanořený formulář
+
+ul.task
+  li na elementu #[strong fieldset] definujte zanořený formulář pojmenovaný #[strong contactForm]
+
+solution
+  :highlight-html
+    <fieldset class="well form-inline"
+              ng-repeat="(index, contact) in vm.contactlist.contacts"
+              ng-form="contactForm">
+
+h4 3.2 validace jména kontaktu
+p.
+  Nyní můžeme definovat validace pro jméno kontaktu. Využijeme komponentu #[strong validation-messages],
+  která validaci zapouzdřuje.
+
+ul
+  li.task prohlédněte si definici validační komponenty
+  li.task použijte ji pro jméno kontaktu
+
+hint.
+  #[strong validation-messages] je komponenta - použijeme ji tedy jako element.
+  Jako hodnotu atributu #[strong input-field] očekává komponenta stavová objekt prvku.
+
+solution
+  :highlight-html
+    <validation-messages input-field="contactForm.name"></validation-messages>
+
+h3 4 vlastní validátor
+
+h4 4.1 definujte validátor českého čísla
+
+ul.task
+  li nastavte definiční objekt directivy validátoru, tak aby:
+ul
+  li byla omezená jako atribut,
+  li měla závislost na #[strong ngModel]
+  li #[strong ngModel.$validators] přidala validátor #[strong czechPhoneNumber]
+  li pozor na to, že validátor musí projít, pokud je hodnota undefined, nebo prázdný string, na tyto hodnoty reaguje pouze validátor require
+  li regulární výraz #[strong pattern] je již připraven, stačí zavolat metodu #[strong .test]
+
+solution
+  :highlight-js
+    function validateCzechPhoneNumberDirective() {
+      var pattern = /^(\+420)?( ?\d{3}){3}$/;
+
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModelController) {
+          ngModelController.$validators.czechPhoneNumber = function(value) {
+            if (ngModelController.$isEmpty(value)) {
+              return true;
+            }
+
+            return pattern.test(value);
+          };
+        }
+      };
+    }
+
+h4 4.2 použijte validátor českého čísla
+p.
+  Použijte validátor validateCzechPhoneNumber na phone inputu.
+
+ul.task
+  li
+    | použijte validátor v inputu
+    strong (pozor na #[strong validate-czech-phone-number] vs #[strong validateCzechPhoneNumber])
+
+hint.
+  Direktivi a komponenty maji v JS název s cammelCase, ale v html je používáme jako dash-case
+
+
+solution
+  :highlight-html
+    <input class="form-control" type="text" id="phone-{{$index}}"
+           name="phone"
+           ng-model="contact.phone"
+           validate-czech-phone-number
+           required/>
+
+h4 4.3 definujte chybovou zprávu pro czechPhoneNumber
+p.
+  Definujte chybovou zprávu dle výsledku validace.
+
+ul.task
+  li.
+    validační zpráva pro #[strong czechPhoneNumber] není ve standardních zprávách komponenty #[strong validation-messages] definovaná,
+    dodefinujte ji tedy pro toto použití (využije se transkluze, kterou directiva podporuje).
+
+solution
+  :highlight-html
+    <validation-messages input-field="contactForm.phone">
+      <div ng-message="czechPhoneNumber"> must be czech phone number.</div>
+    </validation-messages>
+
+h3 5 oživte přidávání kontaktů
+p.
+  Tlačítko + pro přidávání kontaktů nefunguje. V tomto kroku ho očivíme a ověříme, že validace fungují pro nově přidané kontakty.
+
+ul.task
+  li tlačítko volá metodu kontrolleru #[strong vm.addContact] - v jejím těle přidejte do pole kontatků novou prázdnou položku
+  li ověřte, že přidávání funguje a validace se chovají spráívně
+
+solution
+  :highlight-js
+    this.addContact = function() {
+      this.contactlist.contacts.push({});
+    };
+
+h3 6 reagujte na odeslání formuláře
+ul.task
+  li obslužte odeslání formuláře
+  li při odeslání formuláře zavolejte metodu kontroleru #[strong vm.save], jako parametr předejte objekt formuláře
+
+hint.
+  událost odeslání formuláře obloužíte direktivou ng-submit
+
+solution
+  :highlight-html
+    <form novalidate name="contactlistForm"
+                      ng-submit="vm.save(contactlistForm)">

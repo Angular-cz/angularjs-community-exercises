@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>01-templates | Angular.cz</title>
+
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+  <script src="/bower_components/angular/angular.js"></script>
+</head>
+
+<!-- TODO 1 - doplňte direktivu inicializující angular -->
+<body>
+
+<script type="text/javascript">
+  var globalVariable = 42;
+</script>
+
+<div class="container">
+  <h3>Expressions</h3>
+  <div class='well'>
+    <ul>
+      <!-- TODO 2 - vyzkoušejte různé výraz -->
+      <li>1 + 3 =</li>
+      <li>1 * 5 =</li>
+      <li>ternary-true:</li>
+      <li>ternary-false:</li>
+      <li>globalVariable:</li>
+      <li>window.globalVariable:</li>
+    </ul>
+  </div>
+
+  <h3>Databinding</h3>
+  <div class='well'>
+    <!--TODO 3 - přidejte atribut ng-model a zobrazte hodnotu-->
+    Firma <input type="text" class="form-control"/><br/>
+    <h4>Ahoj ... !</h4>
+  </div>
+</div>
+</body>
+</html>
