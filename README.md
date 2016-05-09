@@ -1,5 +1,8 @@
 # Cvičení - www.angular.cz #
 
+Ukázková cvičení pro komunitní akce ze [školení AngularJS - angular.cz](http://www.angular.cz/#skoleni-pro-firmy)
+
+
 ## Co si nainstalovat
 - [git](http://git-scm.com/downloads)
 - doporučenou verzi [nodeJS](https://nodejs.org/en/) - 4.x
