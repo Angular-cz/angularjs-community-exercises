@@ -8,6 +8,7 @@
     "connect": "^3.4.1",
     "courseware": "^0.4.12",
     "gulp": "^3.9.1",
+    "jasmine-core": "^2.4.1",
     "karma": "^0.13.21",
     "karma-chrome-launcher": "~0.2",
     "karma-cli": "0.1.2",
@@ -22,14 +23,11 @@
   },
   "scripts": {
     "postinstall": "bower install && courseware build",
-
     "start": "gulp",
     "devel": "courseware devel",
-
     "test-05-di": "karma start 05-di/karma.conf.js",
     "test-06-di-unit-testing": "karma start 06-di-unit-testing/karma.conf.js",
     "test-09-directive-scope": "karma start 09-directive-scope/karma.conf.js",
-
     "update": "git reset --hard && rm -rf node_modules bower_components && git pull && rm -rf node_modules && npm install"
   }
 }
