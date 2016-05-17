@@ -1,7 +1,9 @@
+p V tomto příkladu si vyzkoušíte základní vlastnosti formulářů a také možnosti jejich zanoření. Budeme vytvářet pojmenovaný seznam kontaktů
+
 h3 1. vyzkoušejte že formulář funguje
 ul
   li podívejte se v #[em index.html]
-  li jak je navázaný na vlastnost #[strong contactlist] controlleru ContactlistController
+  li jak je navázaný na vlastnost #[strong contactlist] controlleru #[strong ContactlistController]
   li jak se mění třídy formuláře a prvků
   li jak se do modelu propagují validní/nevalidní hodnoty
 
@@ -12,22 +14,27 @@ p.
 h4 2.1 přiřaďte formulář do scope
 p.
   Stavové informace o formuláři bude angular ukládat do objektu pojmenovaném podle názvu formuláře.
-  Formulář tedy nejprve pojemnujeme, abychom měli přístup ke stavoým informacím.
+  Formulář tedy nejprve pojmenujeme, abychom měli přístup ke stavovým informacím.
 ul
   li.task pojmenujte formulář #[strong contactlistForm]
 
+hint Využijte vlastnost formuláře #[strong name]
 solution
   :highlight-html
     <form novalidate name="contactlistForm">
 
-h4 TODO 2.2 zobrazení validačních textů
+h4 2.2 zobrazení validačních textů
 p.
-  Všimněte si, že chybové zprávy pro název kontakt listu jsou zobrazeny vždy.
+  Všimněte si, že chybové zprávy pole pro název seznamu kontaktů jsou zobrazeny vždy.
   Zajistíme teď jejich zobrazení jen když je konkrétní validační pravidlo porušeno.
-  Položka je povinná a má minimální délku 5 znaků.
 
-ul.task
-  li použijte ng-messages / ng-message pro správní zobrazení textů
+ul
+  li Položka je povinná a má minimální povolenou délku 5 znaků.
+  li Ve formuláři bude položka dostupná pod názvem #[strong listName]
+  li.task použijte #[strong ng-messages] / #[strong ng-message] pro správní zobrazení textů
+
+
+hint Direktivě #[strong ng-messages] předejte vlastnost #[strong $error] validovaného pole
 
 solution
   :highlight-html
@@ -40,16 +47,16 @@ solution
       </div>
     </div>
 
-h4 TODO 2.3 user-friendly chování
+h4 2.3 user-friendly chování
 p.
-  Validační texty se nyní zobrazují správně, ale jsou vidět okamžite po obnovení stránky,
+  Validační texty se nyní zobrazují správně, ale jsou vidět okamžite po obnovení stránky.
   Lepší by bylo zobrazit je až při odeslání formuláře, nebo ve chvíli kdy uživatel s políčkem pracoval.
-
-hint.
-  využijte vlasnost $submited na formuláři a $touched na prvku
 
 ul
   li.task zobrazujte validační texty až když je to relevantní
+
+hint.
+  Využijte vlastnost #[strong $submitted] na formuláři a #[strong $touched] na prvku.
 
 solution
   :highlight-html
@@ -69,12 +76,14 @@ h3 3 Zanořený formulář
 p.
   Část formuláře se jmény a čísly se opakuje pro každý kontakt.
   V názvech a cestách pro validaci bychom tedy museli používat dynamicky sestavenou cestu od formuláře #[strong contactlistForm], což by bylo komplikované.
-  Namísto toho využujeme zanožený formulář
+  Namísto toho využujeme možnost zanořovat formuláře.
 
 h4 3.1 vytvořte zanořený formulář
 
 ul.task
-  li na elementu #[strong fieldset] definujte zanořený formulář pojmenovaný #[strong contactForm]
+  li Na elementu #[strong fieldset] definujte zanořený formulář pojmenovaný #[strong contactForm]
+
+hint K vytvoření zanořeného formuláře využijte direktivu #[strong ng-form].
 
 solution
   :highlight-html
@@ -84,7 +93,7 @@ solution
 
 h4 3.2 validace jména kontaktu
 p.
-  Nyní můžeme definovat validace pro jméno kontaktu. Využijeme komponentu #[strong validation-messages],
+  Nyní můžeme definovat validace pro jméno kontaktu. Využijeme připravenou komponentu #[strong validation-messages],
   která validaci zapouzdřuje.
 
 ul
@@ -93,7 +102,7 @@ ul
 
 hint.
   #[strong validation-messages] je komponenta - použijeme ji tedy jako element.
-  Jako hodnotu atributu #[strong input-field] očekává komponenta stavová objekt prvku.
+  Jako hodnotu atributu #[strong input-field] očekává komponenta stavový objekt prvku.
 
 solution
   :highlight-html
@@ -108,9 +117,17 @@ ul.task
 ul
   li byla omezená jako atribut,
   li měla závislost na #[strong ngModel]
-  li #[strong ngModel.$validators] přidala validátor #[strong czechPhoneNumber]
+  li funkce link přijímala #[strong ngModelController] jako čtvrtý parametr
+  li v této funkci přidejte do objektu #[strong ngModelController.$validators] validátor #[strong czechPhoneNumber]
   li pozor na to, že validátor musí projít, pokud je hodnota undefined, nebo prázdný string, na tyto hodnoty reaguje pouze validátor require
   li regulární výraz #[strong pattern] je již připraven, stačí zavolat metodu #[strong .test]
+
+hint Závislost vyjádříte pomocí attributu #[strong require].
+  br
+  | Validátor je funkce která přijímá hodnotu k validaci
+  br
+  | Kontrolu prázdnosti proveďte pomocí metody #[strong ngModelController.$isEmpty]
+
 
 solution
   :highlight-js
@@ -134,16 +151,13 @@ solution
 
 h4 4.2 použijte validátor českého čísla
 p.
-  Použijte validátor validateCzechPhoneNumber na phone inputu.
+  Použijte validátor #[strong validateCzechPhoneNumber] na inputu pro zadání telefonního čísla.
 
 ul.task
-  li
-    | použijte validátor v inputu
-    strong (pozor na #[strong validate-czech-phone-number] vs #[strong validateCzechPhoneNumber])
+  li použijte validátor v inputu (pozor na správné uvedení názvu)
 
 hint.
-  Direktivi a komponenty maji v JS název s cammelCase, ale v html je používáme jako dash-case
-
+  Direktivy a komponenty mají v javascriptu název s #[strong cammelCase], ale v html je používáme jako #[strong dash-case]
 
 solution
   :highlight-html
@@ -157,10 +171,10 @@ h4 4.3 definujte chybovou zprávu pro czechPhoneNumber
 p.
   Definujte chybovou zprávu dle výsledku validace.
 
-ul.task
+ul
   li.
-    validační zpráva pro #[strong czechPhoneNumber] není ve standardních zprávách komponenty #[strong validation-messages] definovaná,
-    dodefinujte ji tedy pro toto použití (využije se transkluze, kterou directiva podporuje).
+    validační zpráva pro #[strong czechPhoneNumber] není ve standardních zprávách komponenty #[strong validation-messages] definovaná
+  li.task dodefinujte ji tedy pro toto použití pomocí #[strong ng-message] uvnitř tagů komponenty (využije se transkluze, kterou komponenta podporuje).
 
 solution
   :highlight-html
@@ -170,11 +184,14 @@ solution
 
 h3 5 oživte přidávání kontaktů
 p.
-  Tlačítko + pro přidávání kontaktů nefunguje. V tomto kroku ho očivíme a ověříme, že validace fungují pro nově přidané kontakty.
+  Tlačítko #[strong +] pro přidávání kontaktů nefunguje. V tomto kroku ho oživíme a ověříme, že validace fungují také pro nově přidané kontakty.
 
-ul.task
-  li tlačítko volá metodu kontrolleru #[strong vm.addContact] - v jejím těle přidejte do pole kontatků novou prázdnou položku
-  li ověřte, že přidávání funguje a validace se chovají spráívně
+ul
+  li tlačítko volá metodu kontrolleru #[strong vm.addContact]
+  li.task v jejím těle přidejte do pole kontatků #[strong this.contactlist.contacts] novou prázdnou položku
+  li.task ověřte, že přidávání funguje a validace se chovají spráívně
+
+hint Použijte metodu #[strong push] a přidejte do ní prázdný objekt #[strong {}].
 
 solution
   :highlight-js
@@ -185,10 +202,10 @@ solution
 h3 6 reagujte na odeslání formuláře
 ul.task
   li obslužte odeslání formuláře
-  li při odeslání formuláře zavolejte metodu kontroleru #[strong vm.save], jako parametr předejte objekt formuláře
+  li při odeslání formuláře zavolejte metodu kontroleru #[strong vm.save], jako parametr jí předejte objekt formuláře
 
 hint.
-  událost odeslání formuláře obloužíte direktivou ng-submit
+  Událost odeslání formuláře obloužíte direktivou #[strong ng-submit].
 
 solution
   :highlight-html

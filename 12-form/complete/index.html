@@ -51,21 +51,25 @@
         </div>
 
         <!-- TODO 3.1 vytvořte zanořený formulář -->
-        <fieldset class="well form-inline"
+        <fieldset class="well row"
                   ng-repeat="(index, contact) in vm.contactlist.contacts"
                   ng-form="contactForm">
 
-          <button type="button" class="btn btn-danger pull-right" ng-click="vm.removeContact(index)">-</button>
+          <div class="col-xs-12">
+            <button type="button" class="btn btn-danger pull-right" ng-click="vm.removeContact(index)">-</button>
+          </div>
 
-          <div class="form-group">
+          <div class="form-group col-sm-6">
             <label for="name-{{$index}}">Name</label>
             <input class="form-control" type="text" id="name-{{$index}}"
                    name="name"
                    ng-model="contact.name"
-                   required />
+                   required/>
 
             <!-- TODO 3.2 validace jména kontaktu -->
             <validation-messages input-field="contactForm.name"></validation-messages>
+          </div>
+          <div class="form-group col-sm-6">
 
             <!-- TODO 4.2 použijte validátor českého čísla -->
             <label for="phone-{{$index}}">Phone</label>
@@ -77,13 +81,16 @@
 
             <validation-messages input-field="contactForm.phone">
               <!-- TODO 4.3 definujte chybovou zprávu pro czechPhoneNumber -->
-              <div ng-message="czechPhoneNumber"> must be czech phone number.</div>
+              <div ng-message="czechPhoneNumber"> Must be czech phone number.</div>
             </validation-messages>
           </div>
+
+
         </fieldset>
 
-        <button type="button" class="btn btn-success" ng-click="vm.addContact()">+</button>
+        <button type="button" class="btn btn-success" ng-click="vm.addContact()">+ Add contact</button>
 
+        </fieldset>
         <hr/>
 
         <button type="submit" class="btn btn-primary">Save</button>
@@ -94,7 +101,7 @@
     </form>
 
   </div>
-  <div class="col-md-3 col-md-offset-1">
+  <div class="col-md-5 col-md-offset-1">
         <pre>
 contactlist:
 {{vm.contactlist|json}}

@@ -1,6 +1,4 @@
-angular.module('FormApp', ['ngMessages', 'ngStorage'])
-  .controller('ContactlistController', ContactlistController)
-  .directive('validateCzechPhoneNumber', validateCzechPhoneNumberDirective);
+'use strict';
 
 function ContactlistController(dataStorage) {
   this.dataStorage = dataStorage;
@@ -53,6 +51,10 @@ function validateCzechPhoneNumberDirective() {
   };
 }
 
+angular.module('FormApp', ['ngMessages', 'ngStorage'])
+  .controller('ContactlistController', ContactlistController)
+  .directive('validateCzechPhoneNumber', validateCzechPhoneNumberDirective);
+
 // --------------- nemodifikujte kód níže --------------
 
 angular.module('FormApp')
@@ -66,6 +68,17 @@ angular.module('FormApp')
     },
     controller: function() {
       this.name = this.name || "Field";
+
+      this.isFormSubmitted = function() {
+        var form = this.inputField.$$parentForm;
+        while (!!form) {
+          if (form.$submitted) {
+            return true;
+          }
+          form = form.$$parentForm;
+        }
+        return false;
+      };
     },
     controllerAs: 'vm'
   })

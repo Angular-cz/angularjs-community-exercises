@@ -1,5 +1,5 @@
 <div ng-messages="vm.inputField.$error"
-     ng-if="vm.inputField.$touched || vm.inputField.$$parentForm.$submitted">
+     ng-if="vm.inputField.$touched || vm.isFormSubmitted()" class="validations">
   <ng-transclude></ng-transclude>
   <div ng-message="required">{{vm.name}} has to be filled.</div>
   <div ng-message="number">{{vm.name}} has to be number.</div>

@@ -1,0 +1,29 @@
+@import '../../bower_components/bootstrap/less/bootstrap.less';
+@icon-font-path:  "../../bower_components/bootstrap/fonts/";
+
+.ng-touched.ng-invalid {
+  .has-error;
+  .form-control;
+}
+
+.ng-touched.ng-valid {
+  .has-success;
+  .form-control;
+}
+
+.ng-submitted .ng-invalid {
+  .has-error;
+  .form-control;
+}
+
+div[ng-message] {
+  .alert;
+  .alert-danger;
+
+  width:100%;
+
+  padding: 10px;
+  margin-top:5px;
+}
+
+

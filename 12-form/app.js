@@ -1,6 +1,4 @@
-angular.module('FormApp', ['ngMessages', 'ngStorage'])
-  .controller('ContactlistController', ContactlistController)
-  .directive('validateCzechPhoneNumber', validateCzechPhoneNumberDirective);
+'use strict';
 
 function ContactlistController(dataStorage) {
   this.dataStorage = dataStorage;
@@ -38,27 +36,44 @@ function validateCzechPhoneNumberDirective() {
   var pattern = /^(\+420)?( ?\d{3}){3}$/;
 
   // TODO 4.1 definujte validátor českého čísla
-  return {
-
-  };
+  return {};
 }
+
+angular.module('FormApp', ['ngMessages', 'ngStorage'])
+  .controller('ContactlistController', ContactlistController)
+  .directive('validateCzechPhoneNumber', validateCzechPhoneNumberDirective);
 
 // --------------- nemodifikujte kód níže --------------
 
+// Definiční objekt komponenty validation-messages
+
+var validationMessagesComponent = {
+  templateUrl: 'validationMessages.html',
+  transclude: true,
+  bindings: {
+    inputField: "<",
+    name: "@",
+    params: "<"
+  },
+  controller: function() {
+    this.name = this.name || "Field";
+
+    this.isFormSubmitted = function() {
+      var form = this.inputField.$$parentForm;
+      while (!!form) {
+        if (form.$submitted) {
+          return true;
+        }
+        form = form.$$parentForm;
+      }
+      return false;
+    };
+  },
+  controllerAs: 'vm'
+};
+
 angular.module('FormApp')
-  .component('validationMessages', {
-    templateUrl: 'validationMessages.html',
-    transclude: true,
-    bindings: {
-      inputField: "<",
-      name: "@",
-      params: "<"
-    },
-    controller: function() {
-      this.name = this.name || "Field";
-    },
-    controllerAs: 'vm'
-  })
+  .component('validationMessages', validationMessagesComponent)
   .service('dataStorage', DataStorage);
 
 function DataStorage($sessionStorage) {
