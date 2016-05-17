@@ -15,7 +15,7 @@ Nodejs se nainstaloval spolu s balíčkovacím nástrojem npm.
 Stáhněte tento balíček kamkoli k sobě. 
 
 ```
-git clone https://bitbucket.org/angular_cz/angularjs-community-exercises.git
+git clone https://bitbucket.org/angular_cz/angularjs-community-exercises
 ```
 
 Spusťte ve staženém adresáři příkaz pro instalaci závislostí. 
